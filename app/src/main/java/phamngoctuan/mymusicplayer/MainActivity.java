@@ -2,6 +2,11 @@ package phamngoctuan.mymusicplayer;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -21,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -35,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static Context context;
+    public static Resources resources;
     public static ProgressDialog progressDialog;
     public static String default_search_url = "http://mp3.zing.vn/tim-kiem/bai-hat.html?q=";
     public static ArrayList<HashMap<String, String>> listSongs;
@@ -153,6 +160,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        resources = getResources();
         initListView();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -288,7 +296,7 @@ public class MainActivity extends AppCompatActivity
             songArtist.setText(song.get("artist"));
             if (song.containsKey("thumbnail")) {
                 try {
-                    LoadBitmapAsync bm = new LoadBitmapAsync(thumb);
+                    LoadBitmapAsync bm = new LoadBitmapAsync(thumb, true);
                     bm.execute(song.get("thumbnail"));
                 }
                 catch (Exception e)
@@ -296,8 +304,12 @@ public class MainActivity extends AppCompatActivity
                     Log.d("debug", "Load bitmap exception: " + e.getMessage());
                 }
             }
-            else
+            else {
                 thumb.setImageResource(R.drawable.disk);
+                LinearLayout ll = (LinearLayout)thumb.getParent();
+                ll.setBackground(resources.getDrawable(R.drawable.bg));
+//                thumb.getRootView().setBackground(resources.getDrawable(R.drawable.bg));
+            }
         }
         catch (Exception e) {
         }

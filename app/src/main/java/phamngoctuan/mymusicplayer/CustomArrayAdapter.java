@@ -93,7 +93,7 @@ public class CustomArrayAdapter extends ArrayAdapter<HashMap<String, String>>{
         HashMap<String, String> song = listSongs.get(position);
         if (song.containsKey("thumbnail")) {
             try {
-                LoadBitmapAsync bm = new LoadBitmapAsync(thumb);
+                LoadBitmapAsync bm = new LoadBitmapAsync(thumb, false);
                 bm.execute(song.get("thumbnail"));
 //                thumb.setImageURI(Uri.parse(song.get("thumbnail")));
             }

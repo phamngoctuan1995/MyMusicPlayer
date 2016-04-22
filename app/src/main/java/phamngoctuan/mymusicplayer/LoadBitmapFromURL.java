@@ -2,9 +2,11 @@ package phamngoctuan.mymusicplayer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,9 +23,12 @@ import java.util.HashMap;
 class LoadBitmapAsync extends AsyncTask<String, Void, Bitmap>
 {
     ImageView view;
-    LoadBitmapAsync(ImageView v)
+    boolean isPlay;
+
+    LoadBitmapAsync(ImageView v, boolean play)
     {
         view  = v;
+        isPlay = play;
     }
 
     @Override
@@ -45,6 +50,11 @@ class LoadBitmapAsync extends AsyncTask<String, Void, Bitmap>
     protected void onPostExecute(Bitmap bmp) {
         if (bmp != null) {
             view.setImageBitmap(bmp);
+            if (isPlay)
+            {
+                LinearLayout ll = (LinearLayout)view.getParent();
+                ll.setBackground(new BitmapDrawable(BlurBuilder.blur(MainActivity.context, bmp)));
+            }
         }
 
         super.onPostExecute(bmp);
